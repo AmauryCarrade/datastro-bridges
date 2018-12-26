@@ -22,6 +22,29 @@ def json_response(json_body, status=200):
     )
 
 
+@app.route("/")
+def index():
+    """
+    Index page
+    Will not use a templates engine for this, sorry
+    """
+    return """
+    <!DOCTYPE html>
+    <html><body>
+    <h1><a href="https://datastro.eu">Datastro</a> bridges</h1>
+    <p>For APIs incompatible with OpenDataSoft supported data models.</p>
+    <ul>
+        <li>
+            <a href="/fireball.api">Fireballs API</a>: same usage, parameters &
+            fields as the <a href="https://ssd-api.jpl.nasa.gov/doc/fireball.html">
+            official API</a> but with data in JSON dicts instead of list of list
+            of fields values with labels apart.
+        </li>
+    </ul>
+    </body></html>
+    """
+
+
 @app.route("/fireball.api")
 @cache.cached(timeout=3600, key_prefix=full_path_cache_key)
 def fireballs():
