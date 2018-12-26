@@ -60,20 +60,14 @@ def fireballs():
         return json_response(r.json(), r.status_code)
 
     nasa = r.json()
-    converted = []
-
-    for line in nasa["data"]:
-        converted.append(dict(zip(nasa["fields"], line)))
-
-    comment = None
-    if nasa["signature"]["version"] != "1.0":
-        comment = f"Warning: data may be erroneous because the API version has changed (is {nasa['signature']['version']}, but this converter targets 1.0)."
 
     return json_response(
         {
             "signature": nasa["signature"],
             "count": nasa["count"],
-            "comment": comment,
-            "data": converted,
+            "comment": f"Warning: data may be erroneous because the API version has changed (is {nasa['signature']['version']}, but this converter targets 1.0)."
+            if nasa["signature"]["version"] != "1.0"
+            else None,
+            "data": [dict(zip(nasa["fields"], line)) for line in nasa["data"]],
         }
     )
